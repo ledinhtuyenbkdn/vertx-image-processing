@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Image Resize App</title>
+  <style>
+    .event-box {
+      margin: 20px;
+      padding: 20px;
+      border: 2px solid teal;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+<div>
+  <form id="upload-form" action="/images" method="post" enctype='multipart/form-data' target="dummyframe">
+    <label for="image">Image:</label><br>
+    <input type="file" id="image" name="image">
+    <input type="submit" value="Submit">
+  </form>
+</div>
+<div id="main"></div>
+<iframe name="dummyframe" id="dummyframe" style="display: none;"></iframe>
+<script language="JavaScript">
+
+  const sse = new EventSource("/images")
+  const main = document.getElementById("main")
+
+  sse.addEventListener("update", (evt) => {
+    const data = JSON.parse(evt.data)
+    const div = document.createElement("div")
+    div.classList.add("event-box");
+    main.appendChild(div)
+    div.innerHTML = `<strong>${data.id}</strong> | <span>name: ${data.name}</span> | <span>url: ${data.target_image_url}</span> (<em>${data.status}</em>)`
+  })
+</script>
+
+</body>
+</html>

@@ -1,0 +1,19 @@
+services:
+  queue:
+    image: rabbitmq:3.10.5-management
+    ports:
+      - 5672:5672
+      - 15672:15672
+    environment:
+      - RABBITMQ_DEFAULT_USER=user
+      - RABBITMQ_DEFAULT_PASS=password
+    restart: always
+  db:
+    image: postgres:14-alpine
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=secret
+    restart: always
+    volumes:
+      - ./data:/var/lib/postgresql/data
